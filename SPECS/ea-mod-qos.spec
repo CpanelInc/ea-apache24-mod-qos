@@ -1,8 +1,9 @@
-%global ns_name ea
+%global ns_name ea-apache24
 %global upstream_name mod_qos
 %global debug_package %{nil}
+%global nice_name mod-qos
 
-Name: %{ns_name}-%{upstream_name}
+Name: %{ns_name}-%{nice_name}
 Version: 11.71
 Summary: mod_qos is a quality of service module for the Apache Web Server.
 
