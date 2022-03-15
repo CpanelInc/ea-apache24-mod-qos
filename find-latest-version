@@ -1,0 +1,62 @@
+#!/usr/local/cpanel/3rdparty/bin/perl
+# cpanel - find-latest-version                  Copyright(c) 2022 cPanel, L.L.C.
+#                                                           All rights Reserved.
+# copyright@cpanel.net                                         http://cpanel.net
+# This code is subject to the cPanel license. Unauthorized copying is prohibited
+#
+# This provides incremental updates to existing packages in EasyApache4.
+package apr::find_latest_version;
+
+use strict;
+use warnings;
+
+use lib "../ea-tools/lib/ea4_tool";    # assumes ea-tools is checked out next to this repo
+use ea4_tool::util ();
+
+use XML::LibXML;
+
+unless ( caller() ) {
+    ea4_tool::util::find_latest_version( \&_get_required, \&_add_sum );
+}
+
+###############
+#### helpers ##
+###############
+
+sub _get_required {
+    my ($http) = @_;
+
+    my $res = $http->get("https://sourceforge.net/projects/mod-qos/rss?path=/");
+    my $content = $res->content;
+
+    my $parser = XML::LibXML->new ();
+    my $doc = $parser->parse_string ($content);
+
+    my ($version, $url, $name);
+
+    foreach my $link ($doc->findnodes ('/rss/channel/item/link')) {
+        # https://sourceforge.net/projects/mod-qos/files/mod_qos-11.66.tar.gz/download
+        my $val = $link->to_literal ();
+
+        if ($val =~ m/mod_qos-([0-9\.]+)\.tar.gz/) {
+            my $xversion = $1;
+            my $xurl = $val;
+            my $xname = "mod_qos-$xversion.tar.gz";
+
+            if (!$version || $xversion > $version) {
+                $version = $xversion;
+                $url = $xurl;
+                $name = $xname;
+            }
+        }
+    }
+
+    return ( $version, $url, $name );
+}
+
+sub _add_sum {
+    my ( $http, $hr ) = @_; 
+
+    return ;
+}
+

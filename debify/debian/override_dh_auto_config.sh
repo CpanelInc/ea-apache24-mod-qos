@@ -13,7 +13,6 @@ cp /usr/share/pkgconfig/ea-apr16-1.pc config
 cp /usr/share/pkgconfig/ea-apr16-util-1.pc config
 
 export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:`pwd`/config"
-echo "PKG_CONFIG_PATH :$PKG_CONFIG_PATH:"
 
 cd apache2
 apr_lib=/opt/cpanel/ea-apr16/lib64
