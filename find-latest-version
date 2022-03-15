@@ -5,7 +5,7 @@
 # This code is subject to the cPanel license. Unauthorized copying is prohibited
 #
 # This provides incremental updates to existing packages in EasyApache4.
-package apr::find_latest_version;
+package ea_apache24_mod_qos::find_latest_version;
 
 use strict;
 use warnings;
@@ -26,28 +26,24 @@ unless ( caller() ) {
 sub _get_required {
     my ($http) = @_;
 
-    my $res = $http->get("https://sourceforge.net/projects/mod-qos/rss?path=/");
+    my $res     = $http->get("https://sourceforge.net/projects/mod-qos/rss?path=/");
     my $content = $res->content;
 
-    my $parser = XML::LibXML->new ();
-    my $doc = $parser->parse_string ($content);
+    my $parser = XML::LibXML->new( load_ext_dtd => 0, ext_ent_handler => sub { } );
+    my $doc    = $parser->parse_string($content);
 
-    my ($version, $url, $name);
+    my ( $version, $url, $name );
 
-    foreach my $link ($doc->findnodes ('/rss/channel/item/link')) {
+    foreach my $link ( $doc->findnodes('/rss/channel/item/link') ) {
+
         # https://sourceforge.net/projects/mod-qos/files/mod_qos-11.66.tar.gz/download
-        my $val = $link->to_literal ();
+        my $val = $link->to_literal();
 
-        if ($val =~ m/mod_qos-([0-9\.]+)\.tar.gz/) {
-            my $xversion = $1;
-            my $xurl = $val;
-            my $xname = "mod_qos-$xversion.tar.gz";
-
-            if (!$version || $xversion > $version) {
-                $version = $xversion;
-                $url = $xurl;
-                $name = $xname;
-            }
+        if ( $val =~ m/mod_qos-([0-9\.]+)\.tar.gz/ ) {
+            $version = $1;
+            $url     = $val;
+            $name    = "mod-qos-$version.tar.gz";
+            last;
         }
     }
 
@@ -55,8 +51,9 @@ sub _get_required {
 }
 
 sub _add_sum {
-    my ( $http, $hr ) = @_; 
+    my ( $http, $hr ) = @_;
 
-    return ;
+    # sourceforge does not currently have a way to get the sub
+    return;
 }
 
