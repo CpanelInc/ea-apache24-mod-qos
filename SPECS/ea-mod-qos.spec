@@ -15,6 +15,8 @@ Group: System Environment/Daemons
 Vendor: cPanel, Inc.
 URL: https://sourceforge.net/projects/mod-qos/
 Source: mod_qos-%{version}.tar.gz
+Source1: 100_mod_qos.conf
+
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires: pcre-devel
@@ -44,6 +46,8 @@ requests and controls server access based on available resources
 %prep
 %setup -q -n mod_qos-%{version}
 
+cp %{SOURCE1} .
+
 %build
 cd apache2
 %define apr_lib /opt/cpanel/ea-apr16/lib64
@@ -59,18 +63,17 @@ strip -g %{upstream_name}.so
 set -x
 rm -rf %{buildroot}
 mkdir -p %{buildroot}%{_httpd_moddir}
-
-echo find
-find . -name "*.so" -print
-echo end find
+mkdir -p %{buildroot}%{_sysconfdir}/apache2/conf.modules.d/
 
 install apache2/%{upstream_name}.so %{buildroot}%{_httpd_moddir}/
+install -p 100_mod_qos.conf %{buildroot}%{_sysconfdir}/apache2/conf.modules.d/100_mod_qos.conf
 
 %clean
 rm -rf %{buildroot}
 
 %files
 %{_libdir}/apache2/modules/mod_qos.so
+%config(noreplace) %{_sysconfdir}/apache2/conf.modules.d/100_mod_qos.conf
 
 %changelog
 * Fri Mar 11 2022 Julian Brown <julian.brown@cpanel.net> - 11.71-1
