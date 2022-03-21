@@ -27,6 +27,10 @@ BuildRequires: ea-apache24-devel ea-apr-devel ea-apr-util-devel
 Requires: ea-apr ea-apr-util
 Requires: ea-apache24
 
+# This only works with worker, and worker has the right logic to conflict
+# with any other mpm
+Requires: ea-apache24-mod_mpm_worker
+
 %define apr_lib /opt/cpanel/ea-apr16/lib64
 %define apr_include /opt/cpanel/ea-apr16/include
 
