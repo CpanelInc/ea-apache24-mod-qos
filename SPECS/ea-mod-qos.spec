@@ -1,7 +1,7 @@
 %global ns_name ea-apache24
 %global upstream_name mod_qos
-%global debug_package %{nil}
 %global nice_name mod-qos
+%global debug_package %{nil}
 
 Name: %{ns_name}-%{nice_name}
 Version: 11.71
@@ -16,6 +16,7 @@ Vendor: cPanel, Inc.
 URL: https://sourceforge.net/projects/mod-qos/
 Source: mod_qos-%{version}.tar.gz
 Source1: 100_mod_qos.conf
+Source2: qos.conf
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -51,6 +52,7 @@ requests and controls server access based on available resources
 %setup -q -n mod_qos-%{version}
 
 cp %{SOURCE1} .
+cp %{SOURCE2} .
 
 %build
 cd apache2
@@ -82,9 +84,11 @@ set -x
 rm -rf %{buildroot}
 mkdir -p %{buildroot}%{_httpd_moddir}
 mkdir -p %{buildroot}%{_sysconfdir}/apache2/conf.modules.d/
+mkdir -p %{buildroot}%{_sysconfdir}/apache2/conf.d/
 
 install apache2/%{upstream_name}.so %{buildroot}%{_httpd_moddir}/
-install -p 100_mod_qos.conf %{buildroot}%{_sysconfdir}/apache2/conf.modules.d/100_mod_qos.conf
+install -m 0644 -p 100_mod_qos.conf %{buildroot}%{_sysconfdir}/apache2/conf.modules.d/100_mod_qos.conf
+install -m 0644 -p qos.conf %{buildroot}%{_sysconfdir}/apache2/conf.d/qos.conf
 
 %clean
 rm -rf %{buildroot}
@@ -92,6 +96,7 @@ rm -rf %{buildroot}
 %files
 %{_libdir}/apache2/modules/mod_qos.so
 %config(noreplace) %{_sysconfdir}/apache2/conf.modules.d/100_mod_qos.conf
+%config(noreplace) %{_sysconfdir}/apache2/conf.d/qos.conf
 
 %changelog
 * Fri Mar 11 2022 Julian Brown <julian.brown@cpanel.net> - 11.71-1
