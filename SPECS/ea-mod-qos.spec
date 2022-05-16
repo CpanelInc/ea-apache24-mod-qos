@@ -4,7 +4,7 @@
 %global debug_package %{nil}
 
 Name: %{ns_name}-%{nice_name}
-Version: 11.71
+Version: 11.72
 Summary: mod_qos is a quality of service module for the Apache Web Server.
 
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4556 for more details
@@ -14,7 +14,7 @@ Release: %{release_prefix}%{?dist}.cpanel
 Group: System Environment/Daemons
 Vendor: cPanel, Inc.
 URL: https://sourceforge.net/projects/mod-qos/
-Source: mod_qos-%{version}.tar.gz
+Source: mod-qos-%{version}.tar.gz
 Source1: 100_mod_qos.conf
 Source2: qos.conf
 
@@ -99,6 +99,9 @@ rm -rf %{buildroot}
 %config(noreplace) %{_sysconfdir}/apache2/conf.d/qos.conf
 
 %changelog
+* Mon May 16 2022 Cory McIntire <cory@cpanel.net> - 11.72-1
+- EA-10709: Update ea-apache24-mod-qos from v11.71 to v11.72
+
 * Fri Mar 11 2022 Julian Brown <julian.brown@cpanel.net> - 11.71-1
 - ZC-9726: Initial build
 
