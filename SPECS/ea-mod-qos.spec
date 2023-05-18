@@ -1,14 +1,13 @@
 %global ns_name ea-apache24
 %global upstream_name mod_qos
 %global nice_name mod-qos
-%global debug_package %{nil}
 
 Name: %{ns_name}-%{nice_name}
 Version: 11.73
 Summary: mod_qos is a quality of service module for the Apache Web Server.
 
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4556 for more details
-%define release_prefix 1
+%define release_prefix 2
 License: Apache License, Version 2.0
 Release: %{release_prefix}%{?dist}.cpanel
 Group: System Environment/Daemons
@@ -99,6 +98,9 @@ rm -rf %{buildroot}
 %config(noreplace) %{_sysconfdir}/apache2/conf.d/qos.conf
 
 %changelog
+* Wed May 17 2023 Dan Muey <dan@cpanel.net> - 11.73-2
+- ZC-10938: Remove DISABLE_DEBUGINFO (and i586 if any) from Makefile, deal w/ debug_package nil
+
 * Mon Jan 09 2023 Travis Holloway <t.holloway@cpanel.net> - 11.73-1
 - EA-11147: Update ea-apache24-mod-qos from v11.72 to v11.73
 
