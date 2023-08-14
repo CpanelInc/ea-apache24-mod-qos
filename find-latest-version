@@ -27,7 +27,7 @@ sub _get_required {
     my ($http) = @_;
 
     my $res     = $http->get("https://sourceforge.net/projects/mod-qos/rss?path=/");
-    my $content = $res->content;
+    my $content = $res->{content};
 
     my $parser = XML::LibXML->new( load_ext_dtd => 0, ext_ent_handler => sub { } );
     my $doc    = $parser->parse_string($content);
