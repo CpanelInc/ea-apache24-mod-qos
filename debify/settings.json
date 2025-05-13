@@ -16,19 +16,11 @@
         "ea_openssl_ver": 1.1
 
     },
-    "remove_from_requires": [
-        "pcre"
-    ],
     "add_to_build_requires": [
         "ea-apr",
         "ea-apr-util",
         "libpcre3",
         "libpcre3-dev"
     ],
-    "add_to_requires": {
-        "ea-mod-qos": [
-            "libpcre3"
-        ]
-    },
     "fix_dh_usrlocal": 1
 }
