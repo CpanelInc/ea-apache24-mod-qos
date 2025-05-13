@@ -14,13 +14,6 @@
         "ea_apu_dir": "/opt/cpanel/ea-apr16",
         "ea_apr_config": "/opt/cpanel/ea-apr16/bin/apr-1-config",
         "ea_openssl_ver": 1.1
-
     },
-    "add_to_build_requires": [
-        "ea-apr",
-        "ea-apr-util",
-        "libpcre3",
-        "libpcre3-dev"
-    ],
     "fix_dh_usrlocal": 1
 }
