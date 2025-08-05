@@ -2,6 +2,11 @@
 %global upstream_name mod_qos
 %global nice_name mod-qos
 
+%if 0%{?rhel} >= 10
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/#_brp_buildroot_policy_scripts
+%global __brp_check_rpaths %{nil}
+%endif
+
 Name: %{ns_name}-%{nice_name}
 Version: 11.76
 Summary: mod_qos is a quality of service module for the Apache Web Server.
@@ -19,8 +24,13 @@ Source2: qos.conf
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
+%if 0%{?rhel} >= 10
+BuildRequires: pcre2-devel
+Requires: pcre2
+%else
 BuildRequires: pcre-devel
 Requires: pcre
+%endif
 
 BuildRequires: tree
 BuildRequires: ea-apache24-devel ea-apr-devel ea-apr-util-devel
@@ -57,7 +67,11 @@ cp %{SOURCE2} .
 cd apache2
 %define apr_lib /opt/cpanel/ea-apr16/lib64
 %if 0%{?rhel} > 7
+%if 0%{?rhel} >= 10
+    %{_httpd_apxs} -L/usr/lib64 -L%{apr_lib} -c mod_qos.c -lcrypto -lpcre2-posix -lapr-1 -laprutil-1
+%else
     %{_httpd_apxs} -L/usr/lib64 -L%{apr_lib} -c mod_qos.c -lcrypto -lpcre -lapr-1 -laprutil-1
+%endif
 %else
     # NOTE: this is for CentOS_7 only
 
