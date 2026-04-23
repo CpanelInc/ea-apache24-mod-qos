@@ -12,7 +12,7 @@ Version: 11.78
 Summary: mod_qos is a quality of service module for the Apache Web Server.
 
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4556 for more details
-%define release_prefix 1
+%define release_prefix 2
 License: Apache License, Version 2.0
 Release: %{release_prefix}%{?dist}.cpanel
 Group: System Environment/Daemons
@@ -112,6 +112,9 @@ rm -rf %{buildroot}
 %config(noreplace) %{_sysconfdir}/apache2/conf.d/qos.conf
 
 %changelog
+* Fri Apr 24 2026 Heekyoung Park <heekyoung.park@webpros.com> - 11.78-2
+- EA4-260: Build for Ubuntu 26.04
+
 * Tue Feb 17 2026 Cory McIntire <cory.mcintire@webpros.com> - 11.78-1
 - EA-13348: Update ea-apache24-mod-qos from v11.77 to v11.78
 
